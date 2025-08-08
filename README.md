@@ -125,6 +125,7 @@ function me() {
 if you have a complex route architecture and you need to access to older parents .
 
 for example the dynamic route `[pj_id].jsx` needs to access prameter of `[admin_id]` .
+
 ```
 pages
 |
@@ -144,8 +145,41 @@ pages
 `[pj_id].jsx` : so this dynamic route able to access to its self and its parent and older parents like `[admin_id]` by using :
 
 ```js
-  const {
-    query: { admin_id, pj_id },
-  } = useRouter();
+const {
+  query: { admin_id, pj_id },
+} = useRouter();
 ```
 
+### link component
+
+you must know that how a Link component works in react.js so in next.js its not very diffrenet you need to call it as the same but from next.js not react-router-dom .
+
+so far there is a bit diffrenece it's just `href` insted of `to` .
+
+and you also can pass the prop -> `replace` as a boolean to this component
+
+```js
+import Link from "next/link";
+function projects() {
+  return (
+    <div>
+      projects
+      <br />
+      <Link href={"/admin/123/projects/34"}>one project</Link>
+    </div>
+  );
+}
+```
+
+if you have a long route address and you want to use a Link component to navigate user to that route, you beter use object for value of `href` instead of `string` :
+
+```jsx
+        <Link
+          href={{
+            pathname: "/admin/[admin_id]/notfication",
+            query: {
+              admin_id: "23",
+            },
+          }}
+        >
+```
