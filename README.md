@@ -15,3 +15,30 @@ directory :
 pages/user-panel/index.jsx = localhost:3000/user-panel 
 pages/user-panel/orders.jsx = localhost:3000/user-panel/orders
 ```
+
+### dynamic routes  
+a dynamic route is a type of route wich gets parameter from url like this :  `route/dynamicParam` -> `route/product-id`
+dynamic routes in next.js are known as a file like this -> `[dynamicParam].jsx / [dynamicParam].js` 
+for example in this architecture we have a nested route as a folder and an index file : 
+```
+pages
+|
+|__article/
+   |
+   |__index.jsx
+|
+|
+```
+and we added a dynamic route in a nested route .
+so in this case our nested route has a dynamic route if we write anything after this addres -> `locallhost:3000/article` like this `locallhost:3000/article/12`, we will navigate to a dynamic route .
+```
+pages
+|
+|__article/
+   |
+   |__index.jsx
+   |
+   |__[id].jsx
+|
+|
+```
