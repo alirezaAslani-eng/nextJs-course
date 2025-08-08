@@ -63,7 +63,7 @@ function OneArticle() {
 
 ### nested dynamic routes
 
-we also can add a dynamic nested as second nested route  .
+we also can add a dynamic nested as second nested route .
 so look at this addrees structure `localhost:3000/admin/[admin-id]/notification` or `localhost:3000/admin/[admin-id]/me` !
 
 - here we have a nested route :
@@ -119,3 +119,33 @@ function me() {
   return <div>this is my id : {admin_id}</div>;
 }
 ```
+
+### access to parent route parameter by query propertiey
+
+if you have a complex route architecture and you need to access to older parents .
+
+for example the dynamic route `[pj_id].jsx` needs to access prameter of `[admin_id]` .
+```
+pages
+|
+|__admin/
+   |
+   |__[admin_id]/
+      |
+      |___projects/
+      |   |-index.jsx
+      |   |-[pj_id].jsx
+      |
+      |-notification.jsx
+      |-me.jsx
+|
+```
+
+`[pj_id].jsx` : so this dynamic route able to access to its self and its parent and older parents like `[admin_id]` by using :
+
+```js
+  const {
+    query: { admin_id, pj_id },
+  } = useRouter();
+```
+
