@@ -212,3 +212,8 @@ function replaceRoute() {
   replace("/");
 }
 ```
+
+### How to create a 404 page 
+
+in next.js it's very ease you just need to add a `404.js/jsx` file in page directory and you also can create other page errors for example for interval server errors like `500>n` it also follow the same pattern, just create a 500.js/jsx file in page directory and render a customized page .
+
