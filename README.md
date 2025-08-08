@@ -183,3 +183,32 @@ if you have a long route address and you want to use a Link component to navigat
           }}
         >
 ```
+
+### dynamic navigators
+
+there are a few functional and important methods that you can use to navigate user dynamically 
+
+in general : 
+
+- `back()` dosen't get any parameters it just go back in history 
+- `push` navigate to a new route 
+- `replace` navigate and replace to a new route 
+```js
+const { back, push, replace } = useRouter();
+function backToHistory() {
+  back();
+}
+function navigator() {
+  push("/article/234");
+  //  or
+  push({
+    pathname: "/article/[id]",
+    query: {
+      id: "1",
+    },
+  });
+}
+function replaceRoute() {
+  replace("/");
+}
+```
