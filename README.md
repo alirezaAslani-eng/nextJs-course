@@ -12,14 +12,16 @@ pages/InfoPage.jsx = localhost:3000/InfoPage
 
 ```bash
 directory :
-pages/user-panel/index.jsx = localhost:3000/user-panel 
+pages/user-panel/index.jsx = localhost:3000/user-panel
 pages/user-panel/orders.jsx = localhost:3000/user-panel/orders
 ```
 
-### dynamic routes  
-a dynamic route is a type of route wich gets parameter from url like this :  `route/dynamicParam` -> `route/product-id`
-dynamic routes in next.js are known as a file like this -> `[dynamicParam].jsx / [dynamicParam].js` 
-for example in this architecture we have a nested route as a folder and an index file : 
+### dynamic routes
+
+a dynamic route is a type of route wich gets parameter from url like this : `route/dynamicParam` -> `route/product-id`
+dynamic routes in next.js are known as a file like this -> `[dynamicParam].jsx / [dynamicParam].js`
+for example in this architecture we have a nested route as a folder and an index file :
+
 ```
 pages
 |
@@ -29,8 +31,10 @@ pages
 |
 |
 ```
+
 and we added a dynamic route in a nested route .
 so in this case our nested route has a dynamic route if we write anything after this addres -> `locallhost:3000/article` like this `locallhost:3000/article/12`, we will navigate to a dynamic route .
+
 ```
 pages
 |
@@ -42,8 +46,10 @@ pages
 |
 |
 ```
-### using parameter in dynamic route 
-this hook `useRouter()` provides details about a route if it's calld in that, so we can access to dynamic parameter by using `query property` from output of this hook like below : 
+
+### using parameter in dynamic route
+
+this hook `useRouter()` provides details about a route if it's calld in that, so we can access to dynamic parameter by using `query property` from output of this hook like below :
 
 ```jsx
 import { useRouter } from "next/router";
@@ -52,5 +58,64 @@ function OneArticle() {
     query: { id }, // here i got id because i created a dynamic route with a (id parameter) like this [id].js
   } = useRouter();
   return <div>show data base on this id {id}</div>;
+}
+```
+
+### nested dynamic routes
+
+we also can add a dynamic nested as second nested route  .
+so look at this addrees structure `localhost:3000/admin/[admin-id]/notification` or `localhost:3000/admin/[admin-id]/me` !
+
+- here we have a nested route :
+
+```
+pages
+|
+|__admin/
+|
+|
+```
+
+- and second `nested dynamic route` :
+- here `[admin_id]` is a folder as child nested route !
+
+```
+pages
+|
+|__admin/
+   |
+   |__[admin_id]/
+|
+|
+```
+
+and `notification.jsx` or `me.jsx` are static child routes in `[admin_id]/` so they can access to `[admin_id]` parameter
+
+```
+pages
+|
+|__admin/
+   |
+   |__[admin_id]/
+      |
+      |-notification.jsx
+      |-me.jsx
+|
+|
+```
+
+```jsx
+function notfication() {
+  const {
+    query: { admin_id },
+  } = useRouter();
+
+  return <div>notfication for admin with id : {admin_id}</div>;
+}
+function me() {
+  const {
+    query: { admin_id },
+  } = useRouter();
+  return <div>this is my id : {admin_id}</div>;
 }
 ```
