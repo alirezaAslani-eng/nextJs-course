@@ -42,3 +42,15 @@ pages
 |
 |
 ```
+### using parameter in dynamic route 
+this hook `useRouter()` provides details about a route if it's calld in that, so we can access to dynamic parameter by using `query property` from output of this hook like below : 
+
+```jsx
+import { useRouter } from "next/router";
+function OneArticle() {
+  const {
+    query: { id }, // here i got id because i created a dynamic route with a (id parameter) like this [id].js
+  } = useRouter();
+  return <div>show data base on this id {id}</div>;
+}
+```

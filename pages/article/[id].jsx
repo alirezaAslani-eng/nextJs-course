@@ -1,7 +1,10 @@
 import React from "react";
-
+import { useRouter } from "next/router";
 function OneArticle() {
-  return <div>OneArticle base on url parameter</div>;
+  const {
+    query: { id },
+  } = useRouter();
+  return <div>show data base on this id {id}</div>;
 }
 
 export default OneArticle;
