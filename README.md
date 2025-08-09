@@ -186,13 +186,14 @@ if you have a long route address and you want to use a Link component to navigat
 
 ### dynamic navigators
 
-there are a few functional and important methods that you can use to navigate user dynamically 
+there are a few functional and important methods that you can use to navigate user dynamically
 
-in general : 
+in general :
 
-- `back()` dosen't get any parameters it just go back in history 
-- `push` navigate to a new route 
-- `replace` navigate and replace to a new route 
+- `back()` dosen't get any parameters it just go back in history
+- `push` navigate to a new route
+- `replace` navigate and replace to a new route
+
 ```js
 const { back, push, replace } = useRouter();
 function backToHistory() {
@@ -213,7 +214,23 @@ function replaceRoute() {
 }
 ```
 
-### How to create a 404 page 
+### How to create a 404 page
 
 in next.js it's very ease you just need to add a `404.js/jsx` file in page directory and you also can create other page errors for example for interval server errors like `500>n` it also follow the same pattern, just create a 500.js/jsx file in page directory and render a customized page .
 
+### geting parameters (Slug)
+
+**geting parameters not only one parameter** for example if you have a dynamic route like `[userid].jsx` and you relize that you need `fullname` and `username` from prameter, so totally they're 3 parameters like `userid/fullname/username` but we got one parameter `userid` so how can we get more than one ?
+
+it's very ease you need just destructure it `[...slug].jsx` insted of get only one like `[userid].jsx` and you can access to it like below :
+
+so it works like this : `p1/p2/p3/more...` pass to `[...slug].jsx` and access to `query.slug` it provides `[p1,p2,p3,more...]` .
+
+```js
+function UserDetails() {
+  const { query } = useRouter();
+  const slug = query.slug || []; // here we said (query.slug || []) because at first it's undefined .
+
+  return <div>{slug.length >= 3 && `${slug[0]}/${slug[1]}/${[slug[2]]}`}</div>;
+}
+```

@@ -17,6 +17,8 @@ export default function App({ Component, pageProps }) {
         <br />
         <Link href={"/admin/123/me"}>my account</Link>
         <br />
+        <Link href={"/users"}>all users</Link>
+        <br />
         <Link
           href={{
             pathname: "/admin/[admin_id]/notfication",
