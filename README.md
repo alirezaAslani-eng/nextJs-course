@@ -1,4 +1,4 @@
-## router
+# router
 
 `nextjs router` is based on file system and we don't need to install a dependency like `react-router-dom` so the `pages folder` is the root of our website and `index.jsx` is the main page, for example if you wirte this address in url `localhost:3000` it starts to load `index.jsx` so for other pages like `InfoPage.jsx` or `Products.jsx` you have to write their specific name in url for example if you have a page like pages/Products.jsx you need a url address like this `localhost:3000/Products`
 
@@ -234,3 +234,22 @@ function UserDetails() {
   return <div>{slug.length >= 3 && `${slug[0]}/${slug[1]}/${[slug[2]]}`}</div>;
 }
 ```
+
+# Pre-rendering
+
+### what is the pre-rendering :
+
+you will learn the most important concepts in next.js, if you read the README file until now .
+
+pre-rendering means that browser get prepared html tamplate from server, so it doesn't need to run all of javascript code to render html in browser because the javascript code that cause to render html and content like components are rendred by server before .
+
+picture to make it sence :
+
+![Pre-rendering-picture](./public/imgs/pre.png)
+
+i said javascript code run on server but in the picture above we can see the browser still run javascript because next.js only make pre rendered content but it dosn't able to handle state, context, javscript events, and another logic so it means `Hydration` .
+
+`Next.js says` : i give you pre rendered html page content but i don't do somthing to handle the interactive states like `events` , `data-refetching` , `context` , `hook` and ...
+
+but after i gave you pre rendred html page content i add a `<script>` as a chunk that relate to the renderd page
+
