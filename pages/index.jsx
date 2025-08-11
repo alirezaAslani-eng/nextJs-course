@@ -1,8 +1,10 @@
+import Link from "next/link";
+
 export default function Home({ data }) {
   return (
     <>
       {data?.map((item) => {
-      return  <div>item</div>;
+      return  <Link href={"products/"+item.id || ""}>go to{item.id}</Link>;
       })}
     </>
   );

@@ -296,10 +296,62 @@ export async function getStaticProps() {
 
 **but you shoud know when and where `getStaticProps` runs**, **it runs and start to fetch data while building or developing** **and it always run on server side you can test it jus by a log you will see the result in terminal not browser**.
 
-the SSG page will use fetched data by geting theme from prameters -> `function Home({ data })` so the SSG page is generated with real data from server and it's html template 
+the SSG page will use fetched data by geting theme from prameters -> `function Home({ data })` so the SSG page is generated with real data from server and it's html template
 
-**RULES** 
+**RULES**
+
 - `getStaticProps` has to be defined in page directory !
 - the name of this method must be `getStaticProps` !
 - the basic value to return must be `{props:{}}` !
- 
+
+### SSG -> `getStaticPath(){}`
+
+what if we create a dynamic route and want to make some changes on it while generaring like data fetching base on a parameter, **first look at this example** :
+
+```js
+import { useRouter } from "next/router";
+import React from "react";
+
+function Products({ data }) {
+  return <div>Hello {data.title}</div>;
+}
+
+export default Products;
+
+export async function getStaticProps(context) {
+  const productID = context.params.id; // << geting dynamic parameter
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${productID}`
+  );
+  const data = await res.json();
+
+  return { props: { data: data } };
+}
+```
+
+it dosen't work and you get error because user might open this dynamic route with diffrenet pramater like `products/id-p-3 , products/id-p-4 , products/id-p-8` and in each request server need to know which page is for this id but in build time server generated just one page -> `[id].html`.
+
+**in general `getStaticProps` says i want to know what id i will get because i need it to fetch data and generate html files for each parameter**
+
+we have to define parameter in dynamic route by exporting `getStaticPaths` this method let us to define parameters as an array so the example below can make it sence :
+
+```js
+export async function getStaticPaths() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await res.json();
+  const paths = data.map((item) => {
+    return { params: { id: String(item.id) } };
+  });
+  return {
+    paths,
+    fallback: false, // << next part you will be reading about this prop
+  };
+}
+```
+
+for eaxample if `data.map` returns this array :
+
+```js
+[{ params: { id: "id-p-1" } }, { params: { id: "id-p-2" } }, { params: { id: "id-p-3" } }];
+```
+**in build time next.js start to fetch and provide data for each one so we have 3 html page `id-p-1.html id-p-2.html id-p-3.html` their basic html are the same but their content are diffrent** 
