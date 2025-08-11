@@ -253,3 +253,15 @@ i said javascript code run on server but in the picture above we can see the bro
 
 but after i gave you pre rendred html page content i add a `<script>` as a chunk that relate to the renderd page
 
+### SSG VS SSR :
+
+- SSR : **_Server side rendering_**
+- SSG : **_Static site generation_**
+
+SSR : when you open a page, server try to run jasavscript to render html and fetching data then send it to client and client get a pre-rendred page with data .
+
+SSG : when you write this command `npm run build or next build` yor SSG page generate to html and get data from server while building not running, that's why we said **Static site** because server don't do somthing diffecult just send a static html with real data .
+
+picture to make it sence :
+
+![Pre-rendering-picture](./public/imgs/ssrVssg.jpg)
