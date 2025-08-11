@@ -265,3 +265,41 @@ SSG : when you write this command `npm run build or next build` yor SSG page gen
 picture to make it sence :
 
 ![Pre-rendering-picture](./public/imgs/ssrVssg.jpg)
+
+### SSG -> `getStaticProps(){}`
+
+before this part of **pre-rendering concept** we understood how it works, now we wiil uderstand more about `SSG` .
+
+so we uderstood that SSG page only generate in building time but how we can fetch data and make some changes while generating ?
+
+**NOTIC** : next.js build SSG pages by default that means if we dont do somthing for pre-rendering and usualy creating our page components, next.js build theme as SSG pages .
+
+we can export a method with the same name as `getStaticProps` and we can fetch our data in it's scope and we shoud return an object like `{props:{...}}` so we can use reterned props like below :
+
+```js
+export default function Home({ data }) {
+  return (
+    <>
+      {data?.map((item) => {
+        return <div>item</div>;
+      })}
+    </>
+  );
+}
+
+export async function getStaticProps() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await res.json();
+  return { props: { data: data } };
+}
+```
+
+**but you shoud know when and where `getStaticProps` runs**, **it runs and start to fetch data while building or developing** **and it always run on server side you can test it jus by a log you will see the result in terminal not browser**.
+
+the SSG page will use fetched data by geting theme from prameters -> `function Home({ data })` so the SSG page is generated with real data from server and it's html template 
+
+**RULES** 
+- `getStaticProps` has to be defined in page directory !
+- the name of this method must be `getStaticProps` !
+- the basic value to return must be `{props:{}}` !
+ 
