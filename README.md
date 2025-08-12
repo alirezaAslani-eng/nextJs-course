@@ -382,3 +382,126 @@ function Products() {
 
 export default Products;
 ```
+
+### Fallback
+
+we defined only 3 parameters like `1` `2` `3` :
+
+```js
+[
+  { params: { id: "1" } }, // 1.html
+  { params: { id: "2" } }, // 2.html
+  { params: { id: "3" } }, // 3.html
+];
+```
+
+but user navigate to `products/8`, next.js start to replace a page like `404.jsx` but we have a product with id `8` in data base so what shoud we do if we have many parameters and we only defined 3 parameters .
+
+`fallback: false` means hey next.js we only have 3 parameters for this dynamic route so next start to genereate only 3 pages `1.html` `2.html` `3.html` while building **and other parameters mean navigate to `404.jsx`** .
+
+`fallback: true` means hey next.js we have 3 parameters but user might open this route with another parameter like `8` but next.js didn't generate a html page like `8.html` so it start to genereate a `8.html` at request time let't brake it down step by step :
+
+```jsx
+function Products({ data }) {
+  const { isFallback } = useRouter();
+  if (isFallback) {
+    return "Loading";
+  }
+  return <div>Hello {data?.title || ""}</div>;
+}
+
+export default Products;
+
+export async function getStaticPaths() {
+  return {
+    paths: [
+      { params: { id: "1" } },
+      { params: { id: "2" } },
+      { params: { id: "2" } },
+    ],
+    fallback: true,
+  };
+}
+
+export async function getStaticProps(context) {
+  const productID = context.params.id;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${productID}`
+  );
+  const data = await res.json();
+  return { props: { data: data } };
+}
+```
+
+- here it fetchs data for each prameters and generate their html file but `1` , `2` , `3` are generated alredy :
+
+**`1` , `2` , `2` are genreated while at build time**
+
+**but other parameters like `4` , `5` , `8` will generate at request time**
+
+```js
+export async function getStaticProps(context) {
+  const productID = context.params.id;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${productID}`
+  );
+  const data = await res.json();
+  return { props: { data: data } };
+}
+```
+
+and `isFalback` is true while fetching to show somthing like a loader :
+
+```js
+function Products({ data }) {
+  const { isFallback } = useRouter();
+  if (isFallback) {
+    return "Loading";
+  }
+  return <div>Hello {data?.title || ""}</div>;
+}
+```
+
+but what if it throw error with status 404 because the parameter like `products/12` is invalid and we don't have a product with id `12` :
+
+```js
+const res = await fetch(
+  `https://jsonplaceholder.typicode.com/posts/${productID}`
+);
+```
+
+so we can return an object to replace a page `{notFound:true}` it replaces `404.jsx`
+
+and we also can redirect user to another route `{redirect:{destination:"/"}}`
+
+```js
+export async function getStaticProps(context) {
+  const productID = context.params.id;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${productID}`
+  );
+  if (res.status == 404) {
+    return { notFound: true };
+  }
+  const data = await res.json();
+  return { props: { data: data } };
+}
+```
+
+we understood what happens if we pass true or false to fallback but there is one more valid value it's `blocking` :
+
+`blocking` means don't navigate quickly to a route, stay on current page until it becomes redy with full content then navigate there it's good because browser doesn't need to see a loader it needs to see content .
+
+```js
+export async function getStaticPaths() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await res.json();
+  const paths = data.map((item) => {
+    return { params: { id: String(item.id) } };
+  });
+  return {
+    paths,
+    fallback: "blocking",
+  };
+}
+```

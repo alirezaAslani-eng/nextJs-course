@@ -2,23 +2,19 @@ import { useRouter } from "next/router";
 import React from "react";
 
 function Products({ data }) {
-  const { query } = useRouter();
-  console.log(data);
-
-  return <div>Hello {data.title}</div>;
+  const { isFallback } = useRouter();
+  if (isFallback) {
+    return "Loading";
+  }
+  return <div>Hello {data?.title || ""}</div>;
 }
 
 export default Products;
 
 export async function getStaticPaths() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const data = await res.json();
-  const paths = data.map((item) => {
-    return { params: { id: String(item.id) } };
-  });
   return {
-    paths,
-    fallback: true,
+    paths: [{ params: { id: "1" } }, { params: { id: "2" } }],
+    fallback: "blocking",
   };
 }
 
@@ -27,7 +23,9 @@ export async function getStaticProps(context) {
   const res = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${productID}`
   );
+  if (res.status == 404) {
+    return { notFound:true};
+  }
   const data = await res.json();
-
   return { props: { data: data } };
 }
