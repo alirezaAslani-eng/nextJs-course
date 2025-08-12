@@ -8,7 +8,7 @@ pages/index.jsx = localhost:3000/
 pages/InfoPage.jsx = localhost:3000/InfoPage
 ```
 
-### nested routes
+prefetch property nested routes
 
 ```bash
 directory :
@@ -352,6 +352,33 @@ export async function getStaticPaths() {
 for eaxample if `data.map` returns this array :
 
 ```js
-[{ params: { id: "id-p-1" } }, { params: { id: "id-p-2" } }, { params: { id: "id-p-3" } }];
+[
+  { params: { id: "id-p-1" } },
+  { params: { id: "id-p-2" } },
+  { params: { id: "id-p-3" } },
+];
 ```
-**in build time next.js start to fetch and provide data for each one so we have 3 html page `id-p-1.html id-p-2.html id-p-3.html` their basic html are the same but their content are diffrent** 
+
+**in build time next.js start to fetch and provide data for each one so we have 3 html page `id-p-1.html id-p-2.html id-p-3.html` their basic html are the same but their content are diffrent**
+
+### prefetch Link prop
+
+before user click on Link Component we can fetch that route by prefetch={true} but it's by default true and work only in production file .
+Eaxample :
+
+```js
+import Link from "next/link";
+import React from "react";
+
+function Products() {
+  return (
+    <div>
+      <Link href={"/products/1"} prefetch>
+        one product
+      </Link>
+    </div>
+  );
+}
+
+export default Products;
+```

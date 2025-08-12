@@ -1,9 +1,14 @@
-import React from 'react'
+import Link from "next/link";
+import React from "react";
 
 function Products() {
   return (
-    <div>Products</div>
-  )
+    <div>
+      <Link href={"/products/1"} prefetch>
+        one product
+      </Link>
+    </div>
+  );
 }
 
-export default Products
+export default Products;
