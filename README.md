@@ -626,3 +626,15 @@ const getServerSideProps = async (context) => {
 };
 ```
 
+### CSR
+
+we know what is the CSR but how we can use it insted of SSR :
+
+there are two ways :
+
+1.  if we didn't export `getServerSideProps` and useing useEffect to fetch data we can have a CSR page .
+2.  we also able to use `React query` to fetch data or `SWR` insted .
+
+### CSR along with SSR
+
+it's easy just use `getServerSideProps` and fetch your data on client side by `useEffect`, `React query` or `SWR` so you have `remote fetching` and `SSR fetching` or just rendering .
