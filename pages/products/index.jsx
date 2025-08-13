@@ -6,7 +6,8 @@ function Products({ products }) {
 
 export default Products;
 
-const getServerSideProps = async () => {
+const getServerSideProps = async (context) => {
+  const { query, req, response } = context;
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   const data = await res.json();
   return { props: { products: data } };

@@ -558,3 +558,19 @@ const getServerSideProps = async () => {
   };
 };
 ```
+
+### Access to request details in SSR
+
+everything about user's request is here like `cookies`, `queries` and we also access to the response of server :
+
+```js
+const getServerSideProps = async (context) => {
+  const { query, req, response } = context;
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await res.json();
+  return {
+    props: { data: data },
+  };
+};
+```
+
