@@ -574,3 +574,19 @@ const getServerSideProps = async (context) => {
 };
 ```
 
+### Dynamic SSR pages
+
+we just need params to fetch and preparing content :
+
+```js
+const getServerSideProps = async (context) => {
+  const { params } = context;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+  );
+  const data = await res.json();
+  return {
+    props: { data: data },
+  };
+};
+```
