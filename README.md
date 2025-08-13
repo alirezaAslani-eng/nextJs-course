@@ -590,3 +590,39 @@ const getServerSideProps = async (context) => {
   };
 };
 ```
+### 404 page in SSR and permanent prop
+
+we need to return this :
+
+```js
+return { notFound: true };
+```
+
+and for directing :
+
+```js
+return { redirect: { destination: "/", permanent: false } };
+```
+
+**NOTIC** `permanent prop` is important it depens on why you want to navigate user to another page
+
+`true` : means if user open this page **again** after redirecting we don't need to request to server anymore we can pass `true` when user dosen't access to the page **at all** like admin dashboard so when we pass `true` browser says i dont ask server about this page and i always redirect user so after first spa request or initial request to this page the scope of `getServerSideProps` redirects user and tell browser `hey don't ask me to run again` .
+
+`false` : for pages like products or special pages for authorized users we pass `false` because in each request we need to check user if they access or not if we pass `true`, user may deside to sign up and go back to open the page but it sill redirect user so we shoud pass `false` when we need to check user in each request .
+
+```js
+const getServerSideProps = async (context) => {
+  const { params } = context;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+  );
+  const data = await res.json();
+  if (Object.keys(data)?.length) {
+    return { notFound: true };
+  }
+  return {
+    props: { data: data },
+  };
+};
+```
+
