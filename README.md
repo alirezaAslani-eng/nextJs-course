@@ -505,3 +505,34 @@ export async function getStaticPaths() {
   };
 }
 ```
+
+### ISR
+
+if we want to update a SSG page we need to open the vsCode and write this command `npm run build` to update a SSG page because it woeks at build time but we have a beter way to do it .
+
+insted of getinig build of project to just update a SSG page at build time we can turn a SSG page to a ISR page but how ?
+
+firts look at this example :
+
+```js
+export async function getStaticProps(context) {
+  const productID = context.params.id;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts/${productID}`
+  );
+  if (res.status == 404) {
+    return { notFound: true };
+  }
+  const data = await res.json();
+  return {
+    props: { data: data },
+    revalidate: 10, // after 10 seconds it reGenerate html and fetch data, put html on server side and update json on client side
+  };
+}
+```
+
+Everything is normal but we added just one prop `revalidate` it tells next.js hey this page is fresh until 10 seconds after this time you shoud generate it and fetch data agian so after 10 seconds we have an updated SSG page and json data on server but how can user see the updated page, it depends on how they open it, there are 2 ways to open a SSG page -> `SPA navigating` and `initial request or refresh the page` but what's the diffrence :
+
+`SPA navigating` : get updated `json data` from server after 10 seconds **when only user navigates to the page**  
+`Initial request or refresh the page` : get whole the data like `generated html page` and `json data`
+
