@@ -536,3 +536,25 @@ Everything is normal but we added just one prop `revalidate` it tells next.js he
 `SPA navigating` : get updated `json data` from server after 10 seconds **when only user navigates to the page**  
 `Initial request or refresh the page` : get whole the data like `generated html page` and `json data`
 
+### SSR
+
+in SSG way we generate and fetch data at build time or reGenerate a SSG page afetr seconds by user's request .
+
+but in SSR way it generate html and fetch data only for each request we never save html file on server so :
+
+- Example :
+  This scope of code always run on server side and for each `spa requset` and `browser request`
+
+**for each initial request or refreshing the page** server fetchs data and prepareing a html with content and send it to client so client will get a pre rendered html with content and bundled js code
+
+**and for each SPA navigation we get json data** so it means each SPA navigation cause fetch data on server side and send it to client as json.
+
+```js
+const getServerSideProps = async () => {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const data = await res.json();
+  return {
+    props: { data: data },
+  };
+};
+```
