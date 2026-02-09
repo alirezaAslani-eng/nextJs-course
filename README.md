@@ -321,7 +321,7 @@ export default Products;
 export async function getStaticProps(context) {
   const productID = context.params.id; // << geting dynamic parameter
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${productID}`
+    `https://jsonplaceholder.typicode.com/posts/${productID}`,
   );
   const data = await res.json();
 
@@ -426,7 +426,7 @@ export async function getStaticPaths() {
 export async function getStaticProps(context) {
   const productID = context.params.id;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${productID}`
+    `https://jsonplaceholder.typicode.com/posts/${productID}`,
   );
   const data = await res.json();
   return { props: { data: data } };
@@ -443,7 +443,7 @@ export async function getStaticProps(context) {
 export async function getStaticProps(context) {
   const productID = context.params.id;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${productID}`
+    `https://jsonplaceholder.typicode.com/posts/${productID}`,
   );
   const data = await res.json();
   return { props: { data: data } };
@@ -466,7 +466,7 @@ but what if it throw error with status 404 because the parameter like `products/
 
 ```js
 const res = await fetch(
-  `https://jsonplaceholder.typicode.com/posts/${productID}`
+  `https://jsonplaceholder.typicode.com/posts/${productID}`,
 );
 ```
 
@@ -478,7 +478,7 @@ and we also can redirect user to another route `{redirect:{destination:"/"}}`
 export async function getStaticProps(context) {
   const productID = context.params.id;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${productID}`
+    `https://jsonplaceholder.typicode.com/posts/${productID}`,
   );
   if (res.status == 404) {
     return { notFound: true };
@@ -518,7 +518,7 @@ firts look at this example :
 export async function getStaticProps(context) {
   const productID = context.params.id;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${productID}`
+    `https://jsonplaceholder.typicode.com/posts/${productID}`,
   );
   if (res.status == 404) {
     return { notFound: true };
@@ -582,7 +582,7 @@ we just need params to fetch and preparing content :
 const getServerSideProps = async (context) => {
   const { params } = context;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`,
   );
   const data = await res.json();
   return {
@@ -590,6 +590,7 @@ const getServerSideProps = async (context) => {
   };
 };
 ```
+
 ### 404 page in SSR and permanent prop
 
 we need to return this :
@@ -614,7 +615,7 @@ return { redirect: { destination: "/", permanent: false } };
 const getServerSideProps = async (context) => {
   const { params } = context;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts/${params.id}`
+    `https://jsonplaceholder.typicode.com/posts/${params.id}`,
   );
   const data = await res.json();
   if (Object.keys(data)?.length) {
@@ -638,3 +639,57 @@ there are two ways :
 ### CSR along with SSR
 
 it's easy just use `getServerSideProps` and fetch your data on client side by `useEffect`, `React query` or `SWR` so you have `remote fetching` and `SSR fetching` or just rendering .
+
+# Advanced
+
+### Image Component Explaination
+
+The `<Image/>` component makes optimizing images much easer and it has a few rules and advanced features that we're going to take a look at important ones.
+
+**These are a few benefits of this component :**
+
+- automatic calculated and configurable **srcset**.
+- Next.js generates and compres images with differenet sizes from the original image and cache theme automaticily.
+- automated lazy loading, pre-loading, no need to add pre loaders for images manulay
+
+**And these are the basic properties that we should know them and why some of them are required :**
+
+- `src` (Required !) : The `URL` address of your original image
+
+- `alt` (Optional) : A replacement text when image loading process fails or src is invalid, important for screen readers and accessibility
+
+- `width` & `height` (Required !) these `width` & `height` are completely works diffrent from the width that CSS applies, they only tells Next.js that this image basicly has a resolution for example `width={100} x height={100}`, so Next.js will calculate and generte other images based on these width and height. but we can change the size of the image using CSS but the real resolution that Next.js will see is based on those two required props
+  **NOTE** : width and height will be calculated as `px`
+
+- `fill` (Optional) : Most of the time, we have a responsive image so we can not say our image has only a specific width and hight, so we can use the property `fill` as true, this way our Image component addes full width and height to the image relative to the parent so we need to wrappe it with a relative positioned element then we are able to configurate the size of the image by CSS.
+  **NOTE** : Passing the prop `sizes` to Image Component is officialy recomended, because Next.js dose not know that what size will be shown in the view port, and it sees it as a hero image and by default use the value `100vw` for `sizes` propery
+
+- `priority` passing this prop to the component as true means that, the image has a high priority and shouldn't load lazily. so Next.js will add a preloader for that image automaticly.
+  **NOTE** : when you pass this prop as true `img` loses `lazy loading feature`
+
+### Image Component Usage
+
+#### Filled image
+
+```jsx
+<div
+  style={{
+    aspectRatio: "9/16",
+    width: "100%",
+    height: "500px",
+    position: "relative",
+  }}
+>
+  <Image
+    // width={500}
+    // height={500}
+    objectFit="cover"
+    priority
+    fill
+    src={"/images.jpeg"}
+    alt="fake picture"
+    sizes="100vw"
+  />
+</div>
+```
+
