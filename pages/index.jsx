@@ -1,11 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 export default function Home() {
   return (
     <>
-      {/* {data?.map((item) => {
-        return <Link href={"products/" + item.id || ""}>go to{item.id}</Link>;
-      })} */}
+      <Head>
+        <title>Home page</title>
+        <meta
+          name="describtion"
+          content="This is a meta tag to describe this page"
+        />
+      </Head>
+      {/* // * Override Previous Head */}
+      <Head>
+        <meta name="describtion" content="Override previous describtion" />
+      </Head>
       <div
         style={{
           aspectRatio: "9/16",
