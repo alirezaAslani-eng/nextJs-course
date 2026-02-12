@@ -777,3 +777,31 @@ export async function getServerSideProps(context) {
   };
 }
 ```
+
+### Next.js Configuration
+
+## `redirects`
+
+To redirect users to another source for any reasons. for example the page needs fixining and during that time, users can not access to the page :
+
+```jsx
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  redirects: () => {
+    return [
+      // * ----- For a page -----
+      {
+        source: "/products/12",
+        destination: "/",
+        permanent: false,
+      },
+      // * ----- For an API -----
+      {
+        source: "/api/v1/auth/me",
+        destination: "api/v2/auth/me",
+        permanent: true, // * Permanent Redirect
+      },
+    ];
+  },
+};
+```
