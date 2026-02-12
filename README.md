@@ -805,3 +805,14 @@ const nextConfig = {
   },
 };
 ```
+
+## `basePath`
+
+When we must deploy our web app on a domain which has a `sub-path` we need to add a `basePath` to server's configuration, notic that you dont need to mention it in `Links` and `src` like this `basePath/image.png`, its only enough to write `/image.png` because next.js will fix theme while building.
+
+```jsx
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  basePath: "/sub-path",
+};
+```
