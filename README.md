@@ -816,3 +816,24 @@ const nextConfig = {
   basePath: "/sub-path",
 };
 ```
+
+## `env`
+
+There are two ways to define public variables in Next.js,
+
+- we can add this specific name `NEXT_PUBLIC_` before our variable's name to turn it into a public one :
+
+```js
+NEXT_PUBLIC_domain = "domain.com";
+```
+
+- in an other way, we can define them in an object at configuraion file like below :
+```jsx
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  env: {
+    // *‌ Public Environment variables
+    domain: "domain.com",
+  },
+};
+```
