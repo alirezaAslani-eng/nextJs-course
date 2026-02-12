@@ -828,12 +828,28 @@ NEXT_PUBLIC_domain = "domain.com";
 ```
 
 - in an other way, we can define them in an object at configuraion file like below :
+
 ```jsx
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
     // *‌ Public Environment variables
     domain: "domain.com",
+  },
+};
+```
+
+## `output`
+
+to have a full static production build, we need to add these configuratons, but notic that you wont be able to use any features that need server processing because this kind of production build will only be served by server.
+
+Next.js `<Image>` optimizition needs server processing, that's why we disabled this feature.
+
+```js
+const nextConfig = {
+  output: "export",
+  images: {
+    unoptimized: true,
   },
 };
 ```
